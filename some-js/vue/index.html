@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body>
+  <div id="app">
+    <!-- <input type="text" v-model="name"> -->
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <h3>v-bind形式：</h3>
+              <h3 v-bind="name">dom 深度遍历</h3>
+              <h3>{{}}}形式：</h3>
+              <h3>{{ name }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="text" v-model="testData1">
+    <h3>{{ testData1 }}</h3>
+    <input type="text" v-model="testData2">
+    <h3>{{ testData2 }}</h3>
+  </div>
+</body>
+<script>
+  window.onload = function () {
+    var app = new Vue({
+      el: '#app',
+      data: {
+        testData1: 'hello vue',
+        testData2: 'v-model',
+        name: 'hello resource'
+      }
+    })
+  }
+
+  function Vue(options = {}) {
+    this.$options = options
+    this.$el = document.querySelector(options.el)
+    this._data = options.data
+    this._watcher = {}  // watcher池
+    this._observer(this._data) // 传入数据，执行函数，重写数据的get set
+    this._compile(this.$el) // 传入dom，执行函数，编译模板 发布订阅
+  }
+
+  Vue.prototype._observer = function (obj) {
+    var _this = this
+    Object.keys(obj).forEach(key => {
+      this._watcher[key] = {
+        // 每个数据的订阅池()
+        _directives: []
+      }
+      var value = obj[key]
+      var _watcher = _this._watcher[key]
+      Object.defineProperty(_this._data, key, {
+        get() {
+          console.log('key:' + key + 'val' + value)
+          return value
+        },
+        set(newVal) {
+          if (value !== newVal) {
+            value = newVal
+            _watcher._directives.forEach((item) => {
+              // 遍历订阅池 
+              item.update()
+            })
+          }
+        }
+      })
+
+    })
+  }
+
+  Vue.prototype._compile = function (el) {
+    var nodes = el.children
+    var _this = this
+    for (let i = 0; i < nodes.length; i++) {
+      var node = nodes[i]
+      if (node.children.length) {
+        this._compile(node)
+      }
+      if (node.hasAttribute('v-model') && (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA')) {
+        node.addEventListener('input', (function (key) {
+          var attVal = node.getAttribute('v-model')
+          _this._watcher[attVal]._directives.push(
+            new Watch(
+              node,
+              _this,
+              attVal,
+              'value'
+            )
+          )
+          return function () { _this._data[attVal] = node[key].value }
+
+        })(i))
+      }
+
+      if (node.hasAttribute('v-bind')) {
+        var attVal = node.getAttribute('v-bind')
+        _this._watcher[attVal]._directives.push(
+          new Watch(
+            node,
+            _this,
+            attVal,
+            'innnerHTML'
+          )
+        )
+      }
+      var reg = /\{\{\s*([^}]+\S)\s*\}\}/g, txt = node.textContent;   // 正则匹配{{}}
+      if (reg.test(txt)) {
+        node.textContent = txt.replace(reg, (matched, placeholder) => {
+          var getName = _this._watcher
+          getName = getName[placeholder]
+          if (!getName._directives) {
+            getName._directives = []
+          }
+          getName._directives.push(new Watch(
+            node,
+            _this,
+            placeholder,
+            'innerHTML'
+          ))
+
+          return placeholder.split('.').reduce((val, key) => {
+            // 获取数据的值 触发get 返回当前值 
+            return _this._data[key]
+          }, _this.$el)
+        })
+      }
+    }
+  }
+
+  function Watch(el, vm, val, attr) {
+    this.el = el
+    this.vm = vm
+    this.val = val
+    this.attr = attr
+    this.update()
+  }
+
+  Watch.prototype.update = function () {
+    this.el[this.attr] = this.vm._data[this.val]
+  }
+</script>
+
+</html>
