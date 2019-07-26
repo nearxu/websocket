@@ -96,7 +96,11 @@
               'value'
             )
           )
-          return function () { _this._data[attVal] = node[key].value }
+          return function () {
+            console.log(node, 'key', key)
+            _this._data[attVal] = nodes[key].value
+
+          }
 
         })(i))
       }
