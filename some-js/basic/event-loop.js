@@ -6,6 +6,13 @@ function fn3 () {
 }
 
 function fn2 () {
-  console.log()
+  console.log('go fn2')
   fn3()
 }
+
+function fn1 () {
+  console.log('go f1')
+  fn2()
+}
+
+fn1()
