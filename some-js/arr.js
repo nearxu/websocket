@@ -104,3 +104,29 @@ console.log(findDiff([1, 2, 3], [3, 4, 5]))
 
 const concatArr = (a, b) => Array.from(new Set([...a, ...b]))
 const setArr = arr => [...new Set(arr)]
+
+// [] [id,name] item => item.id >24
+const reduceFilter = (data, keys, fn) =>
+  data.filter(fn).map(m =>
+    keys.reduce((pre, cur) => {
+      pre[cur] = m[cur]
+      return pre
+    })
+  )
+
+const remove = (arr, fn) =>
+  Array.isArray(arr) ?
+    arr.filter(fn).reduce((pre, cur) => {
+      pre.splice(pre.indexOf(cur), 1)
+      return pre.concat(cur)
+    }, [])
+    :
+    []
+
+const rr = remove([1, 2, 3, 4], n => n % 2 === 0)
+
+console.log(rr, 'rr')
+
+const rrr = (arr, fn) => arr.filter(fn)
+
+console.log(rrr([1, 2, 3, 4], n => n % 2 === 0))
