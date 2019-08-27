@@ -1,0 +1,35 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-08-27 16:41:04
+ * @LastEditTime: 2019-08-27 16:45:08
+ * @LastEditors: Please set LastEditors
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    function showNotice() {
+      Notification.requestPermission(function (pre) {
+        if (pre === 'granted') {
+          var notifiction = new Notification('this is notify', {
+            dir: 'auto',
+            lang: 'hi',
+            tag: 'testTag',
+            body: 'this is content'
+          })
+        }
+      })
+    }
+    showNotice()
+  </script>
+</body>
+
+</html>
