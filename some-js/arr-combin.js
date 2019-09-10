@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 15:04:07
+ * @LastEditTime: 2019-09-04 11:52:34
+ * @LastEditors: Please set LastEditors
+ */
 let doExchange = function (doubleArrays) {
   let doubleLen1 = 0;
   let doubleLen2 = 0;
@@ -34,6 +41,6 @@ let doExchange = function (doubleArrays) {
 
   return doubleArrays[0];
 };
-const a = doExchange([[1, 2, 3], ['a', 'b', 'c']])
+const a = doExchange([[1, 2, 3], ['a', 'b', 'c'], ['aa', 'bb', 'cc', 'dd']])
 
 console.log(a)

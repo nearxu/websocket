@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 11:32:26
+ * @LastEditTime: 2019-09-04 15:08:30
+ * @LastEditors: Please set LastEditors
+ */
 
 
 /**
@@ -107,6 +114,6 @@ function getFlagArrs (m, n = 1) {
   return resultArrs
 }
 
-const a = caculate([1, 2, 3, 4, 5, 6])
+const a = caculate([1, 2, 3, 4, 5, 6, 7, 8])
 
 console.log(a)
